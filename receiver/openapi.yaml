@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: Image Crawling API
+  description: This is a simple API that makes sure image crawling.
+  contact:
+    email: ryancho.hakhyeon@gmail.com
+  version: 1.0.0
+tags:
+  - name: devices
+    description: Available to get several images from Internet.
+paths:
+  /crawling-image:
+    post:
+      tags:
+        - devices
+      summary: List of the results of image crawling
+      description: Make a list of several image crawlings to show short results
+      operationId: app.crawling_image
+      requestBody:
+        description: Reading item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListofImageCrawling'
+      responses:
+        "201":
+          description: list created
+        "400":
+          description: invalid input, object invalid
+  /list-category:
+    post:
+      tags:
+        - devices
+      summary: Categorize all list by theme
+      description: Make a category into the specified section
+      operationId: app.list_category
+      requestBody:
+        description: Reading item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListofImageCategory'
+      responses:
+        "201":
+          description: category created
+        "400":
+          description: invalid input, object invalid
+components:
+  schemas:
+    ListofImageCrawling:
+      required:
+      - image_id
+      - image_name
+      - date_created
+      - features
+      type: object
+      properties:
+        image_id:
+          type: string
+          example: "L_001"
+        image_name:
+          type: string
+          example: car
+        date_created:
+          type: string
+          format: date-time
+        features:
+          $ref: '#/components/schemas/ListFeature'
+    ListofImageCategory:
+      required:
+      - category_id
+      - category_name
+      - images_num
+      - date_created
+      type: object
+      properties:
+        category_id:
+          type: string
+          example: "C_001"
+        category_name:
+          type: string
+          example: vehicle
+        images_num:
+          type: integer
+          example: 100
+        date_created:
+          type: string
+          format: date-time
+    ListFeature:
+      required:
+      - dir_path
+      - dir_size
+      type: object
+      properties:
+        dir_path:
+          type: string
+          example: c:/user/usr
+        dir_size:
+          type: string
+          example: "1 MB"
