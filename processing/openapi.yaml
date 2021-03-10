@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: Image Crawling API
+  description: This is a simple API that makes sure image crawling.
+  contact:
+    email: ryancho.hakhyeon@gmail.com
+  version: 1.0.0
+paths:
+  /stats:
+    get:
+      summary: Get the event stats
+      description: Gets the devices processed statistics
+      operationId: app.get_stats
+      responses:
+        "201":
+          description: Successfully returned a list of somethig events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    ReadingStats:
+      required:
+      - num_ci_readings
+      - num_cl_readings
+      - image_name
+      - category_name
+      type: object
+      properties:
+        num_ci_readings:
+          type: integer
+          example: 500000
+        num_cl_readings:
+          type: integer
+          example: 500000
+        image_name:
+          type: string
+          example: "car"
+        category_name:
+          type: string
+          example: "vehicle"
