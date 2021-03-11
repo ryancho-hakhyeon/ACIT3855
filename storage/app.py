@@ -81,13 +81,14 @@ def list_category(body):
 def get_crawling_image(timestamp):
     session = DB_SESSION()
 
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%S")
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
 
-    readings = session.query(CrawlingImage).filter(CrawlingImage.date_created >= timestamp_datetime)
+    results = session.query(CrawlingImage).filter(and_(CrawlingImage.date_created >= start_timestamp_datetime, CrawlingImage.date_created < end_timestamp_datetime))
 
     result_list = []
-    for reading in readings:
-        result_list.append(reading.to_dict())
+    for result in results:
+        result_list.append(result.to_dict())
 
     session.close()
 
@@ -99,13 +100,14 @@ def get_crawling_image(timestamp):
 def get_list_category(timestamp):
     session = DB_SESSION()
 
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%S")
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
 
-    readings = session.query(ListCategory).filter(ListCategory.date_created >= timestamp_datetime)
+    results = session.query(ListCategory).filter(and_(ListCategory.date_created >= start_timestamp_datetime, ListCategory.date_created < end_timestamp_datetime))
 
     result_list = []
-    for reading in readings:
-        result_list.append(reading.to_dict())
+    for result in results:
+        result_list.append(result.to_dict())
 
     session.close()
 
