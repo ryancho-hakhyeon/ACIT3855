@@ -6,7 +6,7 @@ from pykafka.common import OffsetType
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import _and
+from sqlalchemy.sql import and_
 from base import Base
 from crawling_image import CrawlingImage
 from list_category import ListCategory
