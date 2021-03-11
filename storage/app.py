@@ -6,6 +6,7 @@ from pykafka.common import OffsetType
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import _and
 from base import Base
 from crawling_image import CrawlingImage
 from list_category import ListCategory
@@ -78,13 +79,16 @@ def list_category(body):
     #return NoContent, 201
 
 
-def get_crawling_image(timestamp):
+
+def get_crawling_image(start_timestamp, end_timestamp):
     session = DB_SESSION()
 
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%S")
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
 
-    results = session.query(CrawlingImage).filter(and_(CrawlingImage.date_created >= start_timestamp_datetime, CrawlingImage.date_created < end_timestamp_datetime))
+    results = session.query(CrawlingImage).filter(
+        and_(CrawlingImage.date_created >= start_timestamp_datetime,
+             CrawlingImage.date_created < end_timestamp_datetime))
 
     result_list = []
     for result in results:
@@ -92,18 +96,20 @@ def get_crawling_image(timestamp):
 
     session.close()
 
-    logger.info("Query for Crawling Image readings after %s returns %d results" % (timestamp, len(result_list)))
+    logger.info("Query for Crawling Image readings after %s returns %d results" % (start_timestamp_datetime, len(result_list)))
 
     return result_list, 200
 
 
-def get_list_category(timestamp):
+def get_list_category(start_timestamp, end_timestamp):
     session = DB_SESSION()
 
     start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%S")
     end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
 
-    results = session.query(ListCategory).filter(and_(ListCategory.date_created >= start_timestamp_datetime, ListCategory.date_created < end_timestamp_datetime))
+    results = session.query(ListCategory).filter(
+        and_(ListCategory.date_created >= start_timestamp_datetime,
+             ListCategory.date_created < end_timestamp_datetime))
 
     result_list = []
     for result in results:
@@ -111,7 +117,7 @@ def get_list_category(timestamp):
 
     session.close()
 
-    logger.info("Query for List Category readings after %s returns %d results" % (timestamp, len(result_list)))
+    logger.info("Query for List Category readings after %s returns %d results" % (start_timestamp_datetime, len(result_list)))
 
     return result_list, 200
 
