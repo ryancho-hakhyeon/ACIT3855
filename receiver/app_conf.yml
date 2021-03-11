@@ -1,8 +1,8 @@
 version: 1
 eventstore1:
-  url: http://localhost:8090/crawling-image
+  url: lab-acit3855.eastus.cloudapp.azure.com:8090/crawling-image
 eventstore2:
-  url: http://localhost:8090/list-category
+  url: lab-acit3855.eastus.cloudapp.azure.com:8090/list-category
 events:
   hostname: lab-acit3855.eastus.cloudapp.azure.com
   port: 9092
