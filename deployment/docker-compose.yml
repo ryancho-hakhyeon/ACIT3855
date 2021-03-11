@@ -43,7 +43,7 @@ services:
       # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
-    receiver:
+  receiver:
     image: receiver
     ports:
       - "8080:8080"
