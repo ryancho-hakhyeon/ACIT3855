@@ -9,11 +9,7 @@ import yaml
 import logging.config
 import datetime
 
-
-STORAGE_URL = "http://localhost:8090"
-
 EVENTS_FILE = "events.json"
-MAX_EVENT = 10
 
 with open('app_conf.yml', 'r') as f:
     app_config = yaml.safe_load(f.read())
