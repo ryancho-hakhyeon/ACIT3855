@@ -65,7 +65,7 @@ def populate_stats():
 
     current_updated = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
-    response = requests.get(app_config["eventstore"]["url"] + "/crawling-image?timestamp=" + last_updated)
+    response = requests.get(app_config["eventstore"]["url"] + "/crawling-image?start_timestamp=" + last_updated + "$end_timestamp=" + current_updated)
 
     if response.status_code == 200:
         if "num_ci_readings" in stats.keys():
@@ -81,7 +81,7 @@ def populate_stats():
 
         logger.info("Processed Crawling Image %d" % len(response.json()))
 
-    response = requests.get(app_config["eventstore"]["url"] + "/list-category?timestamp=" + last_updated)
+    response = requests.get(app_config["eventstore"]["url"] + "/list-category?start_timestamp=" + last_updated + "$end_timestamp=" + current_updated)
 
     if response.status_code == 200:
         if "num_cl_readings" in stats.keys():
