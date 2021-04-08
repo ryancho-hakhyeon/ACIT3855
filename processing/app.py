@@ -67,10 +67,10 @@ def populate_stats():
     if os.path.isfile(app_config["datastore"]["filename"]):
         stats_file = open(app_config["datastore"]["filename"])
         data = stats_file.read()
-   
-        stats_file.close()
         stats = json.loads(data)
-
+        
+        stats_file.close()
+        
     last_updated = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
     if "last_updated" in stats:
