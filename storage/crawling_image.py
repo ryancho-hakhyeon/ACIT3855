@@ -12,13 +12,15 @@ class CrawlingImage(Base):
     image_id = Column(String(100), nullable=False)
     image_name = Column(String(100), nullable=False)
     date_created = Column(DateTime, nullable=False)
+    timestamp = Column(String(100), nullable=False)
     dir_path = Column(String(250), nullable=False)
     dir_size = Column(String(100), nullable=True)
 
-    def __init__(self, image_id, image_name, dir_path, dir_size):
+    def __init__(self, image_id, image_name, timestamp, dir_path, dir_size):
         """ Initialize a crawling list """
         self.image_id = image_id
         self.image_name = image_name
+        self.timestamp = timestamp
         self.date_created = datetime.datetime.now()
         self.dir_path = dir_path
         self.dir_size = dir_size
@@ -30,6 +32,7 @@ class CrawlingImage(Base):
         dict['image_id'] = self.image_id
         dict['image_name'] = self.image_name
         dict['date_created'] = self.date_created
+        dict['timestamp'] = self.timestamp
         dict['features'] = {}
         dict['features']['dir_path'] = self.dir_path
         dict['features']['dir_size'] = self.dir_size
