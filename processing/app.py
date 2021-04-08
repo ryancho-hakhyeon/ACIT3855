@@ -76,9 +76,9 @@ def populate_stats():
     if "last_updated" in stats:
         last_updated = stats["last_updated"]
 
-    current_updated = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    current_timestamp = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
-    response = requests.get(app_config["eventstore"]["url"] + "/crawling-image?start_timestamp=" + last_updated + "&end_timestamp=" + current_updated)
+    response = requests.get(app_config["eventstore"]["url"] + "/crawling-image?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
 
     if response.status_code == 200:
         if "num_ci_readings" in stats.keys():
@@ -94,7 +94,7 @@ def populate_stats():
 
         logger.info("Processed Crawling Image %d" % len(response.json()))
 
-    response = requests.get(app_config["eventstore"]["url"] + "/list-category?start_timestamp=" + last_updated + "&end_timestamp=" + current_updated)
+    response = requests.get(app_config["eventstore"]["url"] + "/list-category?start_timestamp=" + last_updated + "&end_timestamp=" + current_timestamp)
 
     if response.status_code == 200:
         if "num_cl_readings" in stats.keys():
@@ -110,7 +110,7 @@ def populate_stats():
 
         logger.info("Processed List Category %d" % len(response.json()))
 
-    stats["last_updated"] = current_updated
+    stats["last_updated"] = current_timestamp
 
     stats_file = open(app_config["datastore"]["filename"], "w")
     stats_file.write(json.dumps(stats, indent=4))
