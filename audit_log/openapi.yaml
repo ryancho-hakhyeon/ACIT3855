@@ -95,7 +95,7 @@ components:
       required:
       - image_id
       - image_name
-      - date_created
+      - timestamp
       - features
       type: object
       properties:
@@ -105,7 +105,7 @@ components:
         image_name:
           type: string
           example: car
-        date_created:
+        timestamp:
           type: string
           format: date-time
         features:
@@ -115,7 +115,7 @@ components:
       - category_id
       - category_name
       - images_num
-      - date_created
+      - timestamp
       type: object
       properties:
         category_id:
@@ -127,7 +127,7 @@ components:
         images_num:
           type: integer
           example: 100
-        date_created:
+        timestamp:
           type: string
           format: date-time
     ListFeature:
