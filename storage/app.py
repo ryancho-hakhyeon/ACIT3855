@@ -138,25 +138,36 @@ def get_list_category(start_timestamp, end_timestamp):
 
 
 def process_messages():
-    hostname = "%s: %d" % (app_config["events"]["hostname"],
-                           app_config["events"]["port"])
+    logger.info("Starting to process messages.")
+    hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
     client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
 
-    consumer = topic.get_simple_consumer(consumer_group=b'event_group', reset_offset_on_start=False,
-                                         auto_offset_reset=OffsetType.LATEST)
+    while True:
+        try:
+            logger.info("Trying to connect to consumer")
+            consumer = topic.get_simple_consumer(consumer_group=b'event_group', reset_offset_on_start=False,
+                                                 auto_offset_reset=OffsetType.LATEST)
+            consumer.stop()
+            consumer.start()
+            logger.info("Processing messages")
 
-    for msg in consumer:
-        msg_str = msg.value.decode('utf-8')
-        msg = json.loads(msg_str)
-        logger.info("Message: %s" % msg)
-        payload = msg["payload"]
+            for msg in consumer:
+                msg_str = msg.value.decode('utf-8')
+                msg = json.loads(msg_str)
+                logger.info("Message: %s" % msg)
+                payload = msg["payload"]
 
-        if msg["type"] == "ci":
-            crawling_image(payload)
-        elif msg["type"] == "cl":
-            list_category(payload)
-        consumer.commit_offsets()
+                if msg["type"] == "ci":
+                    crawling_image(payload)
+                elif msg["type"] == "cl":
+                    list_category(payload)
+
+                consumer.commit_offsets()
+        except:
+            logger.error("Lost connection.")
+        logger.info("Done with Processing Messages.")
+
         
 
 app = connexion.FlaskApp(__name__, specification_dir='')
