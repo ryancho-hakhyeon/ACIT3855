@@ -53,14 +53,17 @@ def crawling_image(body):
     hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
     client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
-    producer = topic.get_sync_producer()
 
-    msg = {"type": "ci",
-           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-           "payload": body
-           }
-    msg_str = json.dumps(msg)
-    producer.produce(msg_str.encode('utf-8'))
+    try:
+        logger.info("Trying to connect.")
+        producer = topic.get_sync_producer()
+        msg = {"type": "ci",
+               "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+               "payload": body}
+        msg_str = json.dumps(msg)
+        producer.produce(msg_str.encode('utf-8'))
+    except:
+        logger.error("Lost connection.")
     logger.info("Returned event Crawling Image response (Id: %s)" % body["image_id"])
 
     #headers = {"Content-Type": "application/json"}
@@ -79,16 +82,18 @@ def list_category(body):
     hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
     client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
-    producer = topic.get_sync_producer()
-
-    msg = {"type": "cl",
-           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-           "payload": body
-           }
-    msg_str = json.dumps(msg)
-    producer.produce(msg_str.encode('utf-8'))
-
+    try:
+        logger.info("Trying to connect.")
+        producer = topic.get_sync_producer()
+        msg = {"type": "cl",
+               "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+               "payload": body}
+        msg_str = json.dumps(msg)
+        producer.produce(msg_str.encode('utf-8'))
+    except:
+        logger.error("Lost connection.")
     logger.info("Returned event Crawling Image response (Id: %s)" % body["category_id"])
+    
     #headers = {"Content-Type": "application/json"}
     #response = requests.post(app_config["eventstore2"]["url"], json=body, headers=headers)
     #logger.info("INFO: list category response ID: %s  %d" % (body["category_id"], response.status_code))
