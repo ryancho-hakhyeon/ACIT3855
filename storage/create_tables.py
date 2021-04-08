@@ -8,9 +8,10 @@ c.execute('''
           (id INTEGER PRIMARY KEY ASC, 
            image_id VARCHAR(100) NOT NULL, 
            image_name VARCHAR(100) NOT NULL,
-           date_created VARCHAR(100) NOT NULL,
            dir_path VARCHAR(250) NOT NULL,
-           dir_size VARCHAR(100))
+           dir_size VARCHAR(100),
+           timestamp VARCHAR(100) NOT NULL,
+           date_created VARCHAR(100) NOT NULL)
           ''')
 
 c.execute('''
@@ -19,6 +20,7 @@ c.execute('''
            category_id VARCHAR(100) NOT NULL, 
            category_name VARCHAR(100) NOT NULL,
            images_num INTEGER NOT NULL,
+           timestamp VARCHAR(100) NOT NULL,
            date_created VARCHAR(100) NOT NULL)
           ''')
 
