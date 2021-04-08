@@ -40,11 +40,6 @@ logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
 
 
-
-
-
-
-
 DB_ENGINE = create_engine('mysql+pymysql://%s:%s@%s:%d/%s' % (app_config["datastore"]["user"],
                                                               app_config["datastore"]["password"],
                                                               app_config["datastore"]["hostname"],
