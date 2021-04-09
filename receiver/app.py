@@ -45,25 +45,34 @@ def log_event(event):
     with open(EVENTS_FILE, "w") as fh:
         fh.write(json.dumps(events_data, indent=4))
 
+RE_TRY = 20
+count = 1
 
+while count < RE_TRY:
+    try:
+        logger.info("Trying to connect.")
+        hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
+        client = KafkaClient(hosts=hostname)
+        topic = client.topics[str.encode(app_config["events"]["topic"])]
+
+        producer = topic.get_sync_producer()
+        break
+    except:
+        logger.error("Lost connection. (%d)" % count)
+        time.sleep(app_config["event"]["period_sec"])
+        count = count + 1
+        
 def crawling_image(body):
     """ Receives a Crawling List """
 
     logger.info("INFO: crawling list response ID: %s " % body["image_id"])
-    hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
 
-    try:
-        logger.info("Trying to connect.")
-        producer = topic.get_sync_producer()
-        msg = {"type": "ci",
-               "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-               "payload": body}
-        msg_str = json.dumps(msg)
-        producer.produce(msg_str.encode('utf-8'))
-    except:
-        logger.error("Lost connection.")
+    msg = {"type": "ci",
+           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+           "payload": body}
+    msg_str = json.dumps(msg)
+    producer.produce(msg_str.encode('utf-8'))
+
     logger.info("Returned event Crawling Image response (Id: %s)" % body["image_id"])
 
     #headers = {"Content-Type": "application/json"}
@@ -79,20 +88,13 @@ def list_category(body):
     """ Receives a Category List """
 
     logger.info("INFO: list category response ID: %s " % body["category_id"])
-    hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
-    try:
-        logger.info("Trying to connect.")
-        producer = topic.get_sync_producer()
-        msg = {"type": "cl",
-               "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-               "payload": body}
-        msg_str = json.dumps(msg)
-        producer.produce(msg_str.encode('utf-8'))
-    except:
-        logger.error("Lost connection.")
-    logger.info("Returned event Crawling Image response (Id: %s)" % body["category_id"])
+
+    msg = {"type":"cl",
+           "datetime": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+           "payload": body}
+
+    msg_str = json.dumps(msg)
+    producer.produce(msg_str.encode('utf-8'))
     
     #headers = {"Content-Type": "application/json"}
     #response = requests.post(app_config["eventstore2"]["url"], json=body, headers=headers)
