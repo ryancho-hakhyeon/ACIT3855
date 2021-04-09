@@ -39,6 +39,7 @@ logger = logging.getLogger('basicLogger')
 logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
 
+RE_TRY = 20
 
 DB_ENGINE = create_engine('mysql+pymysql://%s:%s@%s:%d/%s' % (app_config["datastore"]["user"],
                                                               app_config["datastore"]["password"],
@@ -142,8 +143,9 @@ def process_messages():
     hostname = "%s: %d" % (app_config["events"]["hostname"], app_config["events"]["port"])
     client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
+    count = 1
 
-    while True:
+    while count < RE_TRY:
         try:
             logger.info("Trying to connect to consumer")
             consumer = topic.get_simple_consumer(consumer_group=b'event_group', reset_offset_on_start=False,
@@ -165,10 +167,12 @@ def process_messages():
 
                 consumer.commit_offsets()
         except:
-            logger.error("Lost connection.")
+            logger.error("Lost connection. (%d)" % count)
+            count = count + 1
+            time.sleep(app_config["events"]["period_sec"])
+            
         logger.info("Done with Processing Messages.")
 
-        
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yaml", strict_validation=True, validate_responses=True)
