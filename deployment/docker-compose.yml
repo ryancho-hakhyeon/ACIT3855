@@ -80,7 +80,6 @@ services:
       - "8100"
     networks:
       - "api.network"
-    network_mode: "host"
     environment:
       - TARGET_ENV=test
     volumes:
@@ -133,4 +132,5 @@ services:
 volumes:
   my-db:
   processing-db:
-
+networks:
+  api.network:
