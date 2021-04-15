@@ -101,7 +101,7 @@ services:
       - /home/azureuser/logs:/logs
     depends_on:
       - "kafka"
-  dashboard:
+  dashboard-ui:
     image: dashboard
     ports:
       - "3000"
