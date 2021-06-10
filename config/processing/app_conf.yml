@@ -1,0 +1,7 @@
+version: 1
+datastore:
+  filename: /data/data.json
+scheduler:
+  period_sec: 3
+eventstore:
+  url: http://lab-acit3855.eastus.cloudapp.azure.com/storage
