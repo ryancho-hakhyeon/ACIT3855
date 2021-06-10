@@ -15,6 +15,7 @@ import logging.config
 import yaml
 import datetime
 import json
+import time
 import os
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
@@ -60,6 +61,7 @@ def crawling_image(body):
 
     ci = CrawlingImage(body['image_id'],
                        body['image_name'],
+                       body['timestamp'],
                        body['features']['dir_path'],
                        body['features']['dir_size'])
 
@@ -81,7 +83,8 @@ def list_category(body):
 
     cl = ListCategory(body['category_id'],
                       body['category_name'],
-                      body['images_num'])
+                      body['images_num'],
+                      body['timestamp'])
 
     #logger.debug("DEBUG: " + str(body))
 
@@ -170,7 +173,7 @@ def process_messages():
             logger.error("Lost connection. (%d)" % count)
             count = count + 1
             time.sleep(app_config["events"]["period_sec"])
-            
+
         logger.info("Done with Processing Messages.")
 
 
