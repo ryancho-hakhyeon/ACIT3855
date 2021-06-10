@@ -108,6 +108,7 @@ components:
         timestamp:
           type: string
           format: date-time
+          example: 2016-08-29T09:12:33.001Z
         features:
           $ref: '#/components/schemas/ListFeature'
     ListofImageCategory:
@@ -130,6 +131,7 @@ components:
         timestamp:
           type: string
           format: date-time
+          example: 2016-08-29T09:12:33.001Z
     ListFeature:
       required:
       - dir_path
