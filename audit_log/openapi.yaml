@@ -7,7 +7,7 @@ info:
   version: 1.0.0
 
 paths:
-  /crawling-image:
+  /crawling_image:
     get:
       tags:
         - devices
@@ -48,7 +48,7 @@ paths:
                 properties:
                   message:
                     type: string
-  /list-category:
+  /list_category:
     get:
       tags:
         - devices
@@ -108,6 +108,7 @@ components:
         timestamp:
           type: string
           format: date-time
+          example: 2016-02-17T09:30:33.001z
         features:
           $ref: '#/components/schemas/ListFeature'
     ListofImageCategory:
@@ -130,6 +131,7 @@ components:
         timestamp:
           type: string
           format: date-time
+          example: 2016-02-17T09:30:33.001z
     ListFeature:
       required:
       - dir_path
