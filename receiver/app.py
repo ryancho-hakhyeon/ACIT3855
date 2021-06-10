@@ -10,6 +10,7 @@ import logging.config
 import datetime
 import time
 
+
 EVENTS_FILE = "events.json"
 MAX_EVENT = 10
 
@@ -60,7 +61,7 @@ while count < RE_TRY:
         break
     except:
         logger.error("Lost connection. (%d)" % count)
-        time.sleep(app_config["event"]["period_sec"])
+        time.sleep(app_config["events"]["period_sec"])
         count = count + 1
         
 def crawling_image(body):
@@ -84,7 +85,6 @@ def crawling_image(body):
 
     return NoContent, 201
 
-
 def list_category(body):
     """ Receives a Category List """
 
@@ -96,7 +96,8 @@ def list_category(body):
 
     msg_str = json.dumps(msg)
     producer.produce(msg_str.encode('utf-8'))
-    
+
+    logger.info("Returned event Crawling Image response (Id: %s)" % body["category_id"])
     #headers = {"Content-Type": "application/json"}
     #response = requests.post(app_config["eventstore2"]["url"], json=body, headers=headers)
     #logger.info("INFO: list category response ID: %s  %d" % (body["category_id"], response.status_code))
