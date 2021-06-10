@@ -8,10 +8,10 @@ export default function AppStats() {
 
 	const getStats = () => {
 	
-        fetch(`http://lab-acit3855.eastus.cloudapp.azure.com:8100/stats`)
+        fetch(`http://lab-acit3855.eastus.cloudapp.azure.com/processing/stats`)
             .then(res => res.json())
             .then((result)=>{
-				console.log("Received Stats")
+                console.log("Received Stats")
                 setStats(result);
                 setIsLoaded(true);
             },(error) =>{
@@ -20,8 +20,8 @@ export default function AppStats() {
             })
     }
     useEffect(() => {
-		const interval = setInterval(() => getStats(), 2000); // Update every 2 seconds
-		return() => clearInterval(interval);
+        const interval = setInterval(() => getStats(), 2000); // Update every 2 seconds
+        return() => clearInterval(interval);
     }, [getStats]);
 
     if (error){
@@ -31,7 +31,7 @@ export default function AppStats() {
     } else if (isLoaded === true){
         return(
             <div>
-                <h1>Latest Stats</h1>
+                <h1>Latest Stats Test</h1>
                 <table className={"StatsTable"}>
 					<tbody>
 						<tr>
